@@ -59,6 +59,4 @@ semilogy(w, fftshift(abs(fft(killing_me_softly_median3))), 'g');
 soundsc(killing_me_softly_median3);
 
 %% R3.e)
-n = 2;
-killing_me_softly_medianN = medfilt1(killing_me_softly, n);
-soundsc(killing_me_softly_medianN);
+
