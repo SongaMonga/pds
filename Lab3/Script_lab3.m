@@ -1,6 +1,6 @@
 %% R1.a)
-killing_me_softly = audioread('fugee.wav');
-soundsc(killing_me_softly);
+[killing_me_softly, Fs] = audioread('fugee.wav');
+soundsc(killing_me_softly, 8000);
 
 %% R1.b)
 t = 1:length(killing_me_softly);
