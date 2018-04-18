@@ -42,7 +42,10 @@ killing_me_softly_butter = filter(b, a, killing_me_softly);
 soundsc(killing_me_softly_butter); 
 
 %% R2.f)
-
+w_cf = 0.25; %or 0.75 for the cut off frequency
+[b, a] = butter(10, w_cf);
+killing_me_softly = audioread('fugee.wav');
+killing_me_softly_butter = filter(b, a, killing_me_softly); %low-pass filter the signal
 
 %% R3.b)
 killing_me_softly = audioread('fugee.wav');
