@@ -1,0 +1,27 @@
+% %% R1.b)
+% load("energy_train.mat");
+% N = 96;
+% a = longtermpred(x_train, N);
+% figure
+% title('Graph of Sine and Cosine Between -2\pi and 2\pi')
+% plot(x_train(N+1:end));
+% x_pred = a*x_train(N+1:end);
+% figure
+% plot(x_pred);
+% r = x_train(N+1:end)-x_pred;
+% figure
+% plot(r)
+% 
+% %% R1.c)
+% load("energy_train.mat");
+% N = 96;
+% a = longtermpred(x_train, N);
+% x_pred = a*x_train(N+1:end);
+% r = x_train(N+1:end)-x_pred;
+% E = sum(r)^2;
+
+%% R1.e)
+load("energy_train.mat");
+P = 5;
+a = shorttermpred(x_train, P);
+x_pred = symsum(a(k)*x_train(N+1:end);

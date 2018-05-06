@@ -69,7 +69,7 @@ killing_me_softly_median3 = medfilt1(killing_me_softly);
 soundsc(killing_me_softly_median3);
 
 %% R3.e)
-n = 7;
+n = 2; %order
 killing_me_softly = audioread('fugee.wav');
-killing_me_softly_medianN = medfilt1(killing_me_softly, n); %filter the signal with a 7-th order median filter
+killing_me_softly_medianN = medfilt1(killing_me_softly, n); %filter the signal with a n-th order median filter
 soundsc(killing_me_softly_medianN);
