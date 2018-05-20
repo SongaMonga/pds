@@ -46,6 +46,28 @@ water_nor = normpdf(water(:), p_water_nor(1), p_water_nor(2)); %compute the pdf 
 figure('Name', 'Water - Normal'); scatter(water(:), water_nor, 'filled')
 
 %% R2.a)
+clear all; close all
+load("sar_image.mat");
+ice = imcrop(I, [760 2453 949 188]);
+water = imcrop(I, [1 1 629 1234]);
+p_ice_nor = mle(ice(:), 'distribution', 'Normal');
+p_water_nor = mle(water(:), 'distribution', 'Normal');
+ice_nor = normpdf(ice(:), p_ice_nor(1), p_ice_nor(2));
+water_nor = normpdf(water(:), p_water_nor(1), p_water_nor(2));
+
+for x = 1:size(I, 1)
+    for y = 1:size(I, 2)
+        dist1 = ice_nor(I(x,y));
+        dist2 = water_nor(I(x,y));
+        if(dist1 < dist2)
+            I(x,y) = 1;
+        else
+            I(x,y) = 0;
+        end
+    end
+end
+
+figure; imcontour(I)
 
 %% R2.b)
 
