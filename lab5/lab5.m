@@ -1,8 +1,8 @@
 %% R1.b)
 clear all; close all
 load("sar_image.mat");
-colormap cool %apply a different color mapping to better distinguish ice from water
-imagesc(I);
+figure; colormap hsv %apply a different color mapping to better distinguish ice from water
+imagesc(I); truesize 
 
 %% R1.c)
 clear all; close all
@@ -46,7 +46,6 @@ water_nor = normpdf(water(:), p_water_nor(1), p_water_nor(2)); %compute the pdf 
 figure('Name', 'Water - Normal'); scatter(water(:), water_nor, 'filled')
 
 %% R2.a)
-clear all; close all
 load("sar_image.mat");
 ice = imcrop(I, [760 2453 949 188]);
 water = imcrop(I, [1 1 629 1234]);
@@ -55,22 +54,64 @@ p_water_nor = mle(water(:), 'distribution', 'Normal');
 ice_nor = normpdf(ice(:), p_ice_nor(1), p_ice_nor(2));
 water_nor = normpdf(water(:), p_water_nor(1), p_water_nor(2));
 
+I_A = zeros(size(I));
 for x = 1:size(I, 1)
     for y = 1:size(I, 2)
-        dist1 = ice_nor(I(x,y));
-        dist2 = water_nor(I(x,y));
-        if(dist1 < dist2)
-            I(x,y) = 1;
-        else
-            I(x,y) = 0;
-        end
+        prob1 = ice_nor(I(x,y));
+        prob2 = water_nor(I(x,y));
+        I_A(x,y) = prob1 < prob2;
     end
 end
 
-figure; imcontour(I)
+figure; colormap hsv
+imcontour(I_A, 1)
 
 %% R2.b)
+load("sar_image.mat");
+ice = imcrop(I, [760 2453 949 188]);
+water = imcrop(I, [1 1 629 1234]);
+p_ice_nor = mle(ice(:), 'distribution', 'Normal');
+p_water_nor = mle(water(:), 'distribution', 'Normal');
+ice_nor = normpdf(ice(:), p_ice_nor(1), p_ice_nor(2));
+water_nor = normpdf(water(:), p_water_nor(1), p_water_nor(2));
+
+I_B = zeros(size(I));
+for x = 1:size(I, 1)
+    for y = 1:size(I, 2)
+        val = [];
+        for a = -3:3
+            for b = -3:3
+                c = x + a;
+                d = y + b;
+                if(c > 0 || c <= size(I, 1) || d > 0 || d <= size(I, 2))
+                    val = [val I(x,y)];
+                end
+            end
+        end
+        avg = mean(val);
+        prob1 = ice_nor(avg);
+        prob2 = water_nor(avg);
+        I_B(x,y) = prob1 < prob2;
+    end
+end
+
+figure; colormap hsv
+imcontour(I_B, 1)
 
 %% R2.c)
+load("sar_image.mat");
+threshold = 90;
+I_C = zeros(size(I));
+I_C = I > threshold;
+figure; colormap hsv
+imcontour(I_C, 1)
 
-%% R2.d)
+%% R2.d) needs to run R2.a-c) first
+ice_C = imcrop(I_C, [760 2453 949 188]);
+figure; colormap hsv
+imcontour(ice_C, 1)
+water_C = imcrop(I_C, [1 1 629 1234]);
+figure; colormap hsv
+imcontour(water_C, 1)
+rate_ice_C = sum(ice_C(:))/prod(size(ice));
+rate_water_C = 1 - sum(water_C(:))/prod(size(water));
