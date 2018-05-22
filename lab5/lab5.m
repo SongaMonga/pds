@@ -17,7 +17,7 @@ p_water_exp = mle(water(:), 'distribution', 'Exponential');
 p_water_ray = mle(water(:), 'distribution', 'Rayleigh');
 p_water_nor = mle(water(:), 'distribution', 'Normal');
 
-%% R1.d)
+%% R1.d) %we should plot all of the distributions on the same graph
 clear all; close all
 load("sar_image.mat");
 ice = imcrop(I, [760 2453 949 188]);
