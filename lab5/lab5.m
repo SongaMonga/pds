@@ -86,7 +86,7 @@ for x = 1:size(I, 1)
         end
         prob1 = normpdf(val, p_ice_nor(1), p_ice_nor(2));
         prob2 = normpdf(val, p_water_nor(1), p_water_nor(2));
-        I_B(x,y) = mean(prob1 < prob2) > 0.5;
+        I_B(x,y) = mean(prob1 < prob2) > 0.5; % if the number of pixels more likely to belong to one region is higher than for the other region 
     end
 end
 
@@ -97,16 +97,34 @@ imcontour(I_B, 1)
 load("sar_image.mat");
 threshold = 90;
 I_C = zeros(size(I)); %store the image segmented with a threshold
-I_C = I > threshold;
+I_C = I <= threshold;
 figure; colormap hsv
 imcontour(I_C, 1)
 
 %% R2.d) needs to run R2.a-c) first
+ice_A = imcrop(I_A, [760 2453 949 188]);
+figure; colormap hsv
+imcontour(ice_A, 1)
+water_A = imcrop(I_A, [1 1 629 1234]);
+figure; colormap hsv
+imcontour(water_A, 1)
+rate_ice_A = 1 - sum(ice_A(:))/prod(size(ice));
+rate_water_A = sum(water_A(:))/prod(size(water));
+
+ice_B = imcrop(I_B, [760 2453 949 188]);
+figure; colormap hsv
+imcontour(ice_B, 1)
+water_B = imcrop(I_B, [1 1 629 1234]);
+figure; colormap hsv
+imcontour(water_B, 1)
+rate_ice_B = 1 - sum(ice_B(:))/prod(size(ice));
+rate_water_B = sum(water_B(:))/prod(size(water));
+
 ice_C = imcrop(I_C, [760 2453 949 188]);
 figure; colormap hsv
 imcontour(ice_C, 1)
 water_C = imcrop(I_C, [1 1 629 1234]);
 figure; colormap hsv
 imcontour(water_C, 1)
-rate_ice_C = sum(ice_C(:))/prod(size(ice));
-rate_water_C = 1 - sum(water_C(:))/prod(size(water));
+rate_ice_C = 1 - sum(ice_C(:))/prod(size(ice));
+rate_water_C = sum(water_C(:))/prod(size(water));
