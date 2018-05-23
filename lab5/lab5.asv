@@ -17,7 +17,7 @@ p_water_exp = mle(water(:), 'distribution', 'Exponential');
 p_water_ray = mle(water(:), 'distribution', 'Rayleigh');
 p_water_nor = mle(water(:), 'distribution', 'Normal');
 
-%% R1.d)
+%% R1.d) %we should plot all of the distributions on the same graph
 clear all; close all
 load("sar_image.mat");
 ice = imcrop(I, [760 2453 949 188]);
@@ -29,15 +29,15 @@ p_water_exp = mle(water(:), 'distribution', 'Exponential');
 p_water_ray = mle(water(:), 'distribution', 'Rayleigh');
 p_water_nor = mle(water(:), 'distribution', 'Normal');
 
-figure('Name', 'Ice'); histogram(ice(:), 'Normalization', 'pdf', 'EdgeAlpha', 0) %normalized histogram of the ice values
-ice_exp = exppdf(1:max(ice(:)), p_ice_exp); %compute the pdf with exponential distribution
-hold on; plot(1:max(ice(:)), ice_exp, 'LineWidth', 2.5)
-ice_ray = raylpdf(1:max(ice(:)), p_ice_ray); %compute the pdf with Rayleigh distribution
-hold on; plot(1:max(ice(:)), ice_ray, 'LineWidth', 2.5)
-ice_nor = normpdf(1:max(ice(:)), p_ice_nor(1), p_ice_nor(2)); %compute the pdf with normal distribution
-hold on; plot(1:max(ice(:)), ice_nor, 'LineWidth', 2.5)
+figure('Name', 'Ice'); histogram(ice(:), 'Normalization', 'pdf') %normalized histogram of the ice values
+ice_exp = exppdf(ice(:), p_ice_exp); %compute the pdf with exponential distribution
+hold on; scatter(ice(:), ice_exp, 10, 'filled')
+ice_ray = raylpdf(ice(:), p_ice_ray); %compute the pdf with Rayleigh distribution
+hold on; scatter(ice(:), ice_ray, 10, 'filled')
+ice_nor = normpdf(ice(:), p_ice_nor(1), p_ice_nor(2)); %compute the pdf with normal distribution
+hold on; scatter(ice(:), ice_nor, 10, 'filled')
 
-figure('Name', 'Water'); histogram(water(:), 'Normalization', 'pdf', 'EdgeAlpha', 0) %normalized histogram of the water values
+figure('Name', 'Water'); histogram(water(:), 'Normalization', 'pdf', 'Edge) %normalized histogram of the water values
 water_exp = exppdf(1:max(water(:)), p_water_exp); %compute the pdf with exponential distribution
 hold on; plot(1:max(water(:)), water_exp, 'LineWidth', 2.5)
 water_ray = raylpdf(1:max(water(:)), p_water_ray); %compute the pdf with Rayleigh distribution
